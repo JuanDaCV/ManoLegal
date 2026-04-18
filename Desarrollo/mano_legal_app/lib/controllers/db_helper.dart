@@ -59,7 +59,7 @@ CREATE TABLE abogados (
   doc_sirna $textNullable,
   doc_diploma $textNullable,
   doc_antecedentes $textNullable,
-  estado_verificado TEXT DEFAULT 'pendiente'
+  estado_verificado TEXT NOT NULL DEFAULT 'false'
   )
 ''');
   }

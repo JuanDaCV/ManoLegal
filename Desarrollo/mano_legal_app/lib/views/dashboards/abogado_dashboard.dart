@@ -46,7 +46,7 @@ class AbogadoDashboard extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Text('Bienvenido Abogado: ${abogado.nombres}\nEstado: ${abogado.estadoVerificado}', textAlign: TextAlign.center, style: const TextStyle(fontSize: 20)),
+        child: Text('Bienvenido Abogado: ${abogado.nombres}\nEstado: ${abogado.verificadoLabel}', textAlign: TextAlign.center, style: const TextStyle(fontSize: 20)),
       ),
     );
   }
