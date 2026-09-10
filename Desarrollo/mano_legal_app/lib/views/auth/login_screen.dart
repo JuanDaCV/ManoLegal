@@ -5,6 +5,7 @@ import '../../controllers/auth_controller.dart';
 import 'pre_register_screen.dart';
 import '../dashboards/cliente_dashboard.dart';
 import '../dashboards/abogado_dashboard.dart';
+import '../dashboards/admin_dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,25 +22,47 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login() async {
     if (_correoCtrl.text.isEmpty || _passCtrl.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Llena todos los campos')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Llena todos los campos')));
       return;
     }
     setState(() => _isLoading = true);
-    
-    final result = await _authController.login(_correoCtrl.text.trim(), _passCtrl.text);
-    
+
+    final result = await _authController.login(
+      _correoCtrl.text.trim(),
+      _passCtrl.text,
+    );
+
     setState(() => _isLoading = false);
-    
+
     if (result != null) {
       if (!mounted) return;
       if (result['tipo'] == 'cliente') {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ClienteDashboard(cliente: result['datos'])));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ClienteDashboard(cliente: result['datos']),
+          ),
+        );
+      } else if (result['tipo'] == 'abogado') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => AbogadoDashboard(abogado: result['datos']),
+          ),
+        );
       } else {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AbogadoDashboard(abogado: result['datos'])));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const AdminDashboard()),
+        );
       }
     } else {
-      if(mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Credenciales incorrectas')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Credenciales incorrectas')),
+        );
       }
     }
   }
@@ -72,12 +95,23 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 40),
             const Align(
               alignment: Alignment.centerLeft,
-              child: Text('Inicia sesión', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              child: Text(
+                'Inicia sesión',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 20),
-            CustomTextField(hintText: 'ingresa tu correo electrónico', controller: _correoCtrl, keyboardType: TextInputType.emailAddress),
+            CustomTextField(
+              hintText: 'ingresa tu correo electrónico',
+              controller: _correoCtrl,
+              keyboardType: TextInputType.emailAddress,
+            ),
             const SizedBox(height: 16),
-            CustomTextField(hintText: 'ingresa tu contraseña', controller: _passCtrl, isPassword: true),
+            CustomTextField(
+              hintText: 'ingresa tu contraseña',
+              controller: _passCtrl,
+              isPassword: true,
+            ),
             const SizedBox(height: 30),
             SizedBox(
               width: double.infinity,
@@ -94,15 +128,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Text('¿No tienes una cuenta? '),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const PreRegisterScreen()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const PreRegisterScreen(),
+                      ),
+                    );
                   },
                   child: const Text(
                     'Regístrate',
-                    style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                )
+                ),
               ],
-            )
+            ),
           ],
         ),
       ),

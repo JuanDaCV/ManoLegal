@@ -34,8 +34,26 @@ class Abogado {
     this.docSirna,
     this.docDiploma,
     this.docAntecedentes,
-    this.estadoVerificado = 'pendiente',
+    this.estadoVerificado = 'false',
   });
+
+  bool get verificado => estadoVerificado.toLowerCase() == 'true';
+  set verificado(bool value) => estadoVerificado = value ? 'true' : 'false';
+  String get verificadoLabel => verificado ? 'Verificado' : 'No verificado';
+
+  List<String> get documentosSubidos {
+    final docs = <String>[];
+    if (docCedula != null) docs.add('Cédula');
+    if (docTarjetaProfesional != null) docs.add('Tarjeta');
+    if (docSirna != null) docs.add('Sirna');
+    if (docDiploma != null) docs.add('Diploma');
+    if (docAntecedentes != null) docs.add('Antecedentes');
+    return docs;
+  }
+
+  String get documentosResumen => documentosSubidos.isEmpty
+      ? 'Sin documentos'
+      : documentosSubidos.join(', ');
 
   Map<String, dynamic> toMap() {
     return {
@@ -77,7 +95,7 @@ class Abogado {
       docSirna: map['doc_sirna'],
       docDiploma: map['doc_diploma'],
       docAntecedentes: map['doc_antecedentes'],
-      estadoVerificado: map['estado_verificado'] ?? 'pendiente',
+      estadoVerificado: map['estado_verificado'] ?? 'false',
     );
   }
 }
